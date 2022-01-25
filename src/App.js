@@ -1,23 +1,63 @@
-import logo from './logo.svg';
+import ReactFlow, { removeElements, addEdge} from 'react-flow-renderer';
 import './App.css';
+import { useState } from 'react';
+
+import ExpressionNode from './CustomNodes/ExpressionNode/ExpressionNode';
+
+const initialElements = [
+  {
+    id: '1',
+    type: 'expressionNode',
+    data: {label: 'x+\\frac{y}{z}' , childElements: ['x', 'y'], unresolvedSubexpressions: ['z']},
+    position: { x: 250, y: 125 },
+    style: {border: '2px solid #777', padding: 10}
+  },
+  {
+    id: '2',
+    type: 'output',
+    style: { border: '1px solid #777', padding: 10 },
+    position: {x: 150, y: 250},
+    data: {label: 'x'}
+  },
+  {
+    id: '3',
+    type: 'output',
+    style: { border: '1px solid #777', padding: 10 },
+    data: { label: 'y'},
+    position: { x: 200, y: 250 }
+  },
+  // {
+  //   id: '4',
+  //   type: 'output',
+  //   style: { border: '1px solid #777', padding: 10 },
+  //   data: { label: 'z' },
+  //   position: { x: 250, y: 250 }
+  // },
+  {
+    id: 'e1-2:1',
+    source: '1',
+    target: '2',
+    sourceHandle: 'x'
+  },
+  {
+    id: 'e1-3',
+    source: '1',
+    target: '3',
+    sourceHandle: 'y'
+  }
+];
 
 function App() {
+  const nodeTypes = {
+    expressionNode: ExpressionNode
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{height: '100vh', width: '100vw'}}>
+      <ReactFlow 
+        elements={initialElements}
+        nodeTypes={nodeTypes}
+      />
     </div>
   );
 }
