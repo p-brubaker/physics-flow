@@ -27,11 +27,25 @@ export default function ExpressionNode({ data }) {
             unit: newUnit,
         });
 
+        const newEdge = {
+            id: data.id + '-' + String(flowNodes.length),
+            source: data.id,
+            target: String(flowNodes.length),
+            label: data.unknowns[isEditing],
+            sourceHandle: data.unknowns[isEditing],
+        };
+
+        currentNode.data.children.push(data.unknowns[isEditing]);
         currentNode.data.unknowns.splice(isEditing, 1);
+
+        setIsEditing(null);
+        setNewUnit('');
+        setNewExpression('');
 
         setFlowNodes([
             currentNode,
             ...flowNodes.filter((node) => node.id !== data.id),
+            newEdge,
             newElement,
         ]);
     }
@@ -72,9 +86,9 @@ export default function ExpressionNode({ data }) {
             )}
             {data.children.map((el, i) => (
                 <Handle
-                    key={el.id}
+                    key={el}
                     type="source"
-                    id={el.id}
+                    id={el}
                     position="bottom"
                     isConnectable={true}
                     style={{
