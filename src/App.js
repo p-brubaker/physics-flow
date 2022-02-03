@@ -1,35 +1,37 @@
 import { useState } from 'react';
-import ReactFlow from 'react-flow-renderer';
+import ReactFlow, { Controls } from 'react-flow-renderer';
 import { createFlowElement } from './utils/flow-utils';
 import { EditableMathField } from 'react-mathquill';
-import stringParser from './utils/stringParser';
+import { useFlow } from './context/FlowContext';
 import ExpressionNode from './CustomNodes/ExpressionNode/ExpressionNode';
 import './App.css';
 
 function App() {
     const nodeTypes = { expressionNode: ExpressionNode };
-    const [flowElements, setFlowElements] = useState(null);
     const [rootName, setRootName] = useState('');
     const [rootUnit, setRootUnit] = useState('');
-    const [nodeToEdit, setNodeToEdit] = useState(null);
+    const { flowNodes, setFlowNodes } = useFlow();
+
+    function onLoad(reactFlowInstance) {
+        reactFlowInstance.fitView();
+    }
 
     function setRoot(name, unit) {
-        setFlowElements([
+        setFlowNodes([
             createFlowElement({
-                id: 0,
+                id: '0',
                 name,
                 unit,
                 parent: null,
                 children: [],
                 unknowns: [name],
-                editNode: setNodeToEdit,
             }),
         ]);
     }
 
     return (
         <div className="App">
-            {!flowElements && (
+            {!flowNodes && (
                 <div className="new-problem">
                     <label htmlFor="root-name">
                         Enter a description of the solution to the problem
@@ -49,8 +51,14 @@ function App() {
                 </div>
             )}
             <div className="flow-container">
-                {flowElements && (
-                    <ReactFlow elements={flowElements} nodeTypes={nodeTypes} />
+                {flowNodes && (
+                    <ReactFlow
+                        elements={flowNodes}
+                        onLoad={onLoad}
+                        nodeTypes={nodeTypes}
+                    >
+                        <Controls />
+                    </ReactFlow>
                 )}
             </div>
         </div>
