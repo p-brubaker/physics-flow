@@ -8,10 +8,10 @@ export function createFlowElement(expressionNode) {
             children: expressionNode.children,
             unknowns: expressionNode.unknowns,
             unit: expressionNode.unit,
-            editNode: expressionNode.editNode,
             id: expressionNode.id,
         },
-        position: { x: 0, y: 0 },
+        position: { x: 100, y: 100 },
         style: { border: '2px solid #777', padding: 10 },
+        isInitialized: true,
     };
 }
